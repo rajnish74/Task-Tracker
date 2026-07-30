@@ -28,17 +28,17 @@ export default function Home() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTask = (title, description) => {
-    const newTask = {
-      id: Date.now(),
-      title,
-      description,
-      completed: false,
-      priority: "Low",
-    };
-
-    setTasks([...tasks, newTask]);
+ const addTask = (title, description, priority) => {
+  const newTask = {
+    id: Date.now(),
+    title,
+    description,
+    priority,
+    completed: false,
   };
+
+  setTasks([...tasks, newTask]);
+};
 
   const toggleTask = (id) => {
     setTasks(
