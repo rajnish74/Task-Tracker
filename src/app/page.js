@@ -7,12 +7,14 @@ import TaskList from "../components/TaskList";
 import TaskStats from "../components/TaskStats";
 import TaskFilter from "../components/TaskFilter";
 import TaskSearch from "../components/TaskSearch";
+import PriorityFilter from "../components/PriorityFilter";
 import tasksData from "../data/tasks";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [priorityFilter, setPriorityFilter] = useState("All");
 
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks");
@@ -28,17 +30,17 @@ export default function Home() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
- const addTask = (title, description, priority) => {
-  const newTask = {
-    id: Date.now(),
-    title,
-    description,
-    priority,
-    completed: false,
-  };
+  const addTask = (title, description, priority) => {
+    const newTask = {
+      id: Date.now(),
+      title,
+      description,
+      priority,
+      completed: false,
+    };
 
-  setTasks([...tasks, newTask]);
-};
+    setTasks([...tasks, newTask]);
+  };
 
   const toggleTask = (id) => {
     setTasks(
@@ -61,6 +63,10 @@ export default function Home() {
       return true;
     })
     .filter((task) => {
+      if (priorityFilter === "All") return true;
+      return task.priority === priorityFilter;
+    })
+    .filter((task) => {
       const keyword = search.toLowerCase();
 
       return (
@@ -71,6 +77,7 @@ export default function Home() {
 
   return (
     <main className="max-w-3xl mx-auto p-6">
+
       <Header />
 
       <TaskForm onAddTask={addTask} />
@@ -87,11 +94,17 @@ export default function Home() {
         setFilter={setFilter}
       />
 
+      <PriorityFilter
+        priorityFilter={priorityFilter}
+        setPriorityFilter={setPriorityFilter}
+      />
+
       <TaskList
         tasks={filteredTasks}
         onToggleTask={toggleTask}
         onDeleteTask={deleteTask}
       />
+
     </main>
   );
 }
