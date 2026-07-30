@@ -21,13 +21,35 @@ export default function Home() {
     setTasks([...tasks, newTask]);
   };
 
+  const toggleTask = (id) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id
+        ? { ...task, completed: !task.completed }
+        : task
+    );
+
+    setTasks(updatedTasks);
+  };
+
+  const deleteTask = (id) => {
+    const updatedTasks = tasks.filter(
+      (task) => task.id !== id
+    );
+
+    setTasks(updatedTasks);
+  };
+
   return (
     <main className="max-w-3xl mx-auto p-6">
       <Header />
 
       <TaskForm onAddTask={addTask} />
 
-      <TaskList tasks={tasks} />
+      <TaskList
+        tasks={tasks}
+        onToggleTask={toggleTask}
+        onDeleteTask={deleteTask}
+      />
     </main>
   );
 }
